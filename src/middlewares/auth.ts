@@ -1,0 +1,33 @@
+import { Request, Response, NextFunction } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import User, { IUser } from "../models/User";
+import { AuthenticationError, NotFoundError } from "../errors";
+
+interface ExtendedRequest extends Request {
+    user: IUser;
+}
+
+const authenticate = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            throw new NotFoundError("Missing Authorization Token");
+        }
+        const jwtSecret = process.env.JWT_SECRET;
+        const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
+        console.log(decoded._id);
+        if (!decoded) {
+            throw new AuthenticationError("Unauthorized Error");
+        }
+        const user = await User.findById(decoded._id);
+        if (!user) {
+            throw new NotFoundError("User not found");
+        }
+        req.user = user;
+        next();
+    } catch (error) {
+       next(error)
+    }
+}
+
+export { authenticate };
