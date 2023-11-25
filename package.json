@@ -2,10 +2,15 @@
   "name": "medassist",
   "version": "1.0.0",
   "description": "",
+  "main": "build/server.ts",
   "scripts": {
-    "start": "nodemon src/server.ts ",
+    "build":"tsc",
+    "start": "yarn build &&  node dist/server ",
     "dev": "nodemon src/server.ts ",
     "seed": "ts-node-dev --transpile-only --no-notify --exit-child src/seeders/index.ts"
+  },
+  "engines": {
+    "node": ">=14.20.1"
   },
   "author": "",
   "license": "ISC",
