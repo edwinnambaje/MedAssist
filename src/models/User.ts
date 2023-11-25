@@ -5,17 +5,17 @@ export interface IUser extends mongoose.Document {
   username: string;
   email: string;
   password: string,
-  medicine: mongoose.Schema.Types.ObjectId[];
+  medicineDetails: mongoose.Schema.Types.ObjectId[];
   resetToken?: string;
 }
 export const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  medicine: [
+  medicineDetails: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Medicine"
+      ref: "MedicineDetails"
     }
   ],
   resetToken: { type: String },

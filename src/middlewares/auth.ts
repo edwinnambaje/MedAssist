@@ -9,13 +9,13 @@ interface ExtendedRequest extends Request {
 
 const authenticate = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];
-        if (!token) {
-            throw new NotFoundError("Missing Authorization Token");
+        const { authorization } = req.headers
+        if (!authorization) {
+            throw new AuthenticationError("Missing Authorization Token");
         }
+        const token = authorization.split(' ')[1]
         const jwtSecret = process.env.JWT_SECRET;
         const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
-        console.log(decoded._id);
         if (!decoded) {
             throw new AuthenticationError("Unauthorized Error");
         }

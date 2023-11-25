@@ -1,11 +1,12 @@
 import express from 'express';
-import MedicineController  from '../controllers/medicine.controller';
+import * as MedicineNameController from '../controllers/medicineName';
 
-const medrouter = express.Router();
-medrouter.post('/add', MedicineController.createMedicine);
-medrouter.get('/all', MedicineController.getAllMedicines);
-medrouter.get('/:id', MedicineController.getMedicineById);
-medrouter.put('/:id', MedicineController.updateMedicine);
-medrouter.delete('/:id', MedicineController.deleteMedicine);
+const router = express.Router();
 
-export default medrouter;
+router.post('/add', MedicineNameController.createMedicineName);
+router.get('/all', MedicineNameController.getAllMedicineNames);
+router.get('/:id', MedicineNameController.getMedicineNameById);
+router.put('/:id', MedicineNameController.updateMedicineNameById);
+router.delete('/:id', MedicineNameController.deleteMedicineNameById);
+
+export default router;

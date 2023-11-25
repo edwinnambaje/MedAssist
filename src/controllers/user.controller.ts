@@ -6,6 +6,7 @@ import { BadRequestError, NotFoundError } from "../errors/index";
 import { Jwt } from "../middlewares/jwt";
 import generateNumberToken from "../utils/generateToken";
 import sendEmail from "../utils/sendEmail";
+import SignUpValidation from "../utils/joi";
 
 interface ExtendedRequest extends Request {
     user: IUser;
@@ -96,7 +97,7 @@ class UserController {
             next(error);
         }
     }
-    static async deleteUser(req: Request, res: Response, next:NextFunction) {
+    static async deleteUser(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = req.params.id;
             const user = await User.findById(userId);
@@ -117,8 +118,7 @@ class UserController {
             if (!isPasswordValid) {
                 throw new BadRequestError('Incorrect Old Password')
             }
-            const newHashedPassword = await bcrypt.hash(newPassword, 10)
-            user.password = newHashedPassword
+            user.password = newPassword;
             await user.save()
             return res.send(successResponse("Password updated successfully", user));
         } catch (err) {
@@ -134,7 +134,7 @@ class UserController {
             }
             const token = generateNumberToken(6);
             await sendEmail(email, 'Password Reset', `Your reset token is: ${token}`);
-            user.resetToken=token;
+            user.resetToken = token;
             await user.save();
             return res.send(successResponse("password reset link sent to your email account", null));
         } catch (err) {
@@ -145,11 +145,11 @@ class UserController {
         try {
             const { token } = req.params;
             const { newPassword } = req.body;
-            const user = await User.findOne({ resetToken:token });
+            const user = await User.findOne({ resetToken: token });
             if (!user) {
                 throw new NotFoundError('User not found')
             }
-            user.password= newPassword;
+            user.password = newPassword;
             await user.save();
             return res.send(successResponse("Password reset successfully", null));
         } catch (err) {
