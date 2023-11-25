@@ -2,7 +2,7 @@
   "name": "medassist",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "dev": "nodemon src/server.ts ",
     "seed": "ts-node-dev --transpile-only --no-notify --exit-child src/seeders/index.ts"
