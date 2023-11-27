@@ -1,16 +1,18 @@
-import * as mongoose from "mongoose";
-
-export interface IReminder extends mongoose.Document {
-    userId: mongoose.Schema.Types.ObjectId;
-    medicineId: mongoose.Schema.Types.ObjectId;
-    reminderTime: Date;
+import mongoose, { Schema, Document } from 'mongoose';
+export interface IReminder extends Document {
+  userId: mongoose.Schema.Types.ObjectId;
+  medicineDetailsId: mongoose.Schema.Types.ObjectId;
+  reason: string;
+  scheduledAt: Date;
+  reminderNote?: string
 }
 
-export const ReminderSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    medicineId: { type: mongoose.Schema.Types.ObjectId, ref: "Medicine", required: true },
-    reminderTime: { type: Date, required: true },
+const ReminderSchema: Schema = new Schema({
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  medicineDetailsId: { type: Schema.Types.ObjectId, ref: 'MedicineDetails', required: true },
+  reason: { type: String, required: true },
+  scheduledAt: { type: Date, required: true },
+  reminderNote: { type: Date },
 });
 
-const Reminder = mongoose.model<IReminder>("Reminder", ReminderSchema);
-export default Reminder;
+export default mongoose.model<IReminder>('Reminder', ReminderSchema);

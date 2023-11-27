@@ -1,25 +1,36 @@
 import "dotenv/config";
 import express from "express";
+import cors from 'cors';
 import compression from "compression";
 import cookieparser from "cookie-parser";
 import swaggerUi from 'swagger-ui-express';
 import { errorHandler, notFoundHandler } from "./middlewares/errors";
 import { specs } from './config/swagger';
 import morgan from 'morgan';
-
+import http from 'http';
+import socketIO from 'socket.io';
 import validateResource from "./middlewares/validateResource";
 import sampleRoute from "./routes/sample";
 import connectDB from "./config/db";
 import router from "./routes/user";
 import medrouter from "./routes/medicine";
 import medicinedetailsRouter from "./routes/medicineName";
+import NotificationService from "./services/notificationService";
+import ReminderService from "./services/reminderService";
 const app = express();
+const server = http.createServer(app);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(compression());
 app.use(cookieparser());
+app.use(cors());
+
+const io = new socketIO.Server(server);
+const notificationService = new NotificationService(io);
+const reminderService = new ReminderService(notificationService);
+reminderService.scheduleReminders();
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
