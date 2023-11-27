@@ -15,8 +15,6 @@ import connectDB from "./config/db";
 import router from "./routes/user";
 import medrouter from "./routes/medicine";
 import medicinedetailsRouter from "./routes/medicineName";
-import NotificationService from "./services/notificationService";
-import ReminderService from "./services/reminderService";
 const app = express();
 const server = http.createServer(app);
 
@@ -27,10 +25,6 @@ app.use(compression());
 app.use(cookieparser());
 app.use(cors());
 
-const io = new socketIO.Server(server);
-const notificationService = new NotificationService(io);
-const reminderService = new ReminderService(notificationService);
-reminderService.scheduleReminders();
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
