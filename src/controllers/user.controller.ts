@@ -34,7 +34,7 @@ class UserController {
     static async login(req: Request, res: Response, next: NextFunction) {
         try {
             const {
-                email, password
+                email, password,username
             } = req.body;
             const user = await User.findOne({ email });
             if (!user) {
