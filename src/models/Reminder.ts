@@ -3,9 +3,13 @@ export interface IReminder extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   medicineDetailsId: mongoose.Schema.Types.ObjectId;
   reason: string;
-  customReason?:string,
+  customReason?: string,
   scheduledAt: string;
-  reminderNote?: string
+  reminderNote?: string,
+  intakeStatus?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  isSent:Boolean
 }
 
 const ReminderSchema: Schema = new Schema({
@@ -15,7 +19,11 @@ const ReminderSchema: Schema = new Schema({
   customReason: { type: String },
   scheduledAt: { type: String, required: true },
   reminderNote: { type: Date },
+  intakeStatus: { type: String, enum: ['onTime', 'late', 'missed'] },
+  isSent: { type: Boolean, default:false },
+},{
+  timestamps:true
 });
 
-const Reminder =mongoose.model<IReminder>('Reminder', ReminderSchema);
+const Reminder = mongoose.model<IReminder>('Reminder', ReminderSchema);
 export default Reminder;

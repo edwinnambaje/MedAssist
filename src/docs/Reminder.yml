@@ -54,3 +54,37 @@
         description: Forbidden
       "500":
         description: Internal Server Error
+
+/reminders/confirm/{reminderId}:
+  put:
+    tags:
+      - Reminder
+    summary: Confirm Medication to the system
+    description: Confirm Medication to the system
+    parameters:
+      - name: reminderId
+        in: path
+        description: id of the reminder to confirm
+        type: string
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              intakeStatus:
+                type: string
+                example: onTime
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
