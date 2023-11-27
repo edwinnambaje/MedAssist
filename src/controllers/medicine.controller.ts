@@ -24,10 +24,12 @@ export const createMedicineDetailsForUser = async (req: ExtendedRequest, res: Re
         }
         const { user } = req;
         const { form, frequency, howLong, otherForm, otherFrequency, otherHowLong } = req.body;
+        const lowercaseFrequency = frequency.toLowerCase();
+        const lowercaseForm = form.toLowerCase();
         const newMedicineDetails = new MedicineDetails({
             medicineId,
-            form: form === "other" ? otherForm : form,
-            frequency: frequency === "other" ? otherFrequency : frequency,
+            form: lowercaseForm === "other" ? otherForm : lowercaseForm,
+            frequency: lowercaseFrequency === "other" ? otherFrequency : lowercaseFrequency,
             howLong: howLong === "other" ? otherHowLong : howLong,
             userId:user. _id
         });

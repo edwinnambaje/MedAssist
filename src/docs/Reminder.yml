@@ -1,0 +1,56 @@
+/reminders/add/{medicineDetailsId}:
+  post:
+    tags:
+      - Reminder
+    summary: Add Medication to the system
+    description: Add Medication to the system
+    parameters:
+      - name: medicineDetailsId
+        in: path
+        description: id of the medicine details
+        type: string
+        required: true
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reason:
+                type: string
+                example: Pain relief
+              scheduledAt:
+                type: string
+                example: 5:00
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/reminders/all:
+  get:
+    tags:
+      - Reminder
+    summary: get all Medicines reminders for a user
+    description: get all Medicines reminders for a user
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "500":
+        description: Internal Server Error

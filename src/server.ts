@@ -15,8 +15,14 @@ import connectDB from "./config/db";
 import router from "./routes/user";
 import medrouter from "./routes/medicine";
 import medicinedetailsRouter from "./routes/medicineName";
+import remindRouter from "./routes/reminder";
+import cron from 'node-cron';
+import { remindUser } from "./controllers/reminder.controller";
+
+cron.schedule('* * * * *', async () => {
+    await remindUser();
+});
 const app = express();
-const server = http.createServer(app);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -37,6 +43,7 @@ app.get("/", (req: Request, res: any) => {
 app.use("/api/sample", sampleRoute);
 app.use("/api/v1/users", router);
 app.use("/api/v1/medication", medrouter);
+app.use("/api/v1/reminders", remindRouter);
 app.use("/api/v1/medication-details", medicinedetailsRouter);
 
 app.use(notFoundHandler);
