@@ -34,12 +34,13 @@ class UserController {
     static async login(req: Request, res: Response, next: NextFunction) {
         try {
             const {
-                email, password,username
+                email, password
             } = req.body;
             const user = await User.findOne({ email });
             if (!user) {
                 throw new NotFoundError('User not found');
             }
+            const username= user.username;
             const isPasswordValid: boolean = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
                 throw new BadRequestError('Incorrect Credentials')
@@ -49,7 +50,7 @@ class UserController {
                 username: user.username,
                 email: user.email
             });
-            return res.send(successResponse("Login successfully", token));
+            return res.send(successResponse("Login successfully",null, token, username, email));
         } catch (error) {
             next(error);
         }
